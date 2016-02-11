@@ -8,7 +8,7 @@ fn main() {
     println!("{}", board);
     loop {
         println!("Enter a column number to drop your piece");
-        println!("{}'s turn:", board.player_name());
+        println!("{}'s turn:", board.active_piece.player_name());
         let mut input = String::new();
 
         io::stdin().read_line(&mut input)
@@ -22,5 +22,12 @@ fn main() {
             Err(_) => println!("That is not a valid move")
         }
         println!("{}", board);
+        match board.get_winner() {
+            Some(winner) => {
+                println!("{} wins!", winner.player_name());
+                break;
+            },
+            None => ()
+        }
     }
 }

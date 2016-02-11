@@ -13,6 +13,13 @@ impl Piece {
             Piece::Black => Piece::Red
         }
     }
+
+    pub fn player_name(&self) -> &str {
+        match *self {
+            Piece::Red => "Red",
+            Piece::Black => "Black"
+        }
+    }
 }
 
 impl fmt::Display for Piece {
@@ -22,5 +29,11 @@ impl fmt::Display for Piece {
             Piece::Black => "b"
         };
         write!(f, "{}", symbol)
+    }
+}
+
+impl PartialEq for Piece {
+    fn eq(&self, other: &Piece) -> bool {
+        self.to_string() == other.to_string()
     }
 }

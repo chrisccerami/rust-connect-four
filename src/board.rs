@@ -7,7 +7,7 @@ const WIDTH:usize = 7;
 #[derive(Debug, Copy, Clone)]
 pub struct Board {
     columns: [[Option<Piece>; HEIGHT]; WIDTH],
-    active_piece: Piece
+    pub active_piece: Piece
 }
 
 impl Board {
@@ -32,11 +32,22 @@ impl Board {
         new_board
     }
 
-    pub fn player_name(&self) -> &str {
-        match self.active_piece {
-            Piece::Red => "Red",
-            Piece::Black => "Black"
+    pub fn get_winner(&self) -> Option<Piece> {
+        self.has_vertical_win()
+    }
+
+    fn has_vertical_win(&self) -> Option<Piece> {
+        let mut winner = None;
+        for player in &[Piece::Red, Piece::Black] {
+            for column in &self.columns {
+                for index in (HEIGHT-3)..HEIGHT {
+                    if column[(index-3)..].iter().all(|&piece| piece.is_some() && piece.unwrap() == *player) {
+                        winner = Some(*player)
+                    }
+                }
+            }
         }
+        winner
     }
 }
 
