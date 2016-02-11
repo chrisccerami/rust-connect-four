@@ -31,6 +31,13 @@ impl Board {
         };
         new_board
     }
+
+    pub fn player_name(&self) -> &str {
+        match self.active_piece {
+            Piece::Red => "Red",
+            Piece::Black => "Black"
+        }
+    }
 }
 
 impl fmt::Display for Board {
