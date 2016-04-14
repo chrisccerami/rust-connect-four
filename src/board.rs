@@ -49,7 +49,7 @@ impl Board {
         for player in &[Piece::Red, Piece::Black] {
             for column in &self.columns {
                 for index in (HEIGHT-3)..HEIGHT {
-                    if column[(index-3)..].iter().all(|&piece| piece.is_some() && piece.unwrap() == *player) {
+                    if column[(index-3)..(index+1)].iter().all(|&piece| piece == Some(*player)) {
                         winner = Some(*player)
                     }
                 }
@@ -61,17 +61,12 @@ impl Board {
     fn has_horizontal_win(&self) -> Option<Piece> {
         let mut winner = None;
         for player in &[Piece::Red, Piece::Black] {
-            for starting_index in 0..(WIDTH-3) {
-                for row in 0..(HEIGHT) {
-                    let mut pieces = [None; 4];
-                    let mut counter = 0;
-                    for index in starting_index..(starting_index+3) {
-                        pieces[counter] = self.columns[index][row];
-                        counter += 1;
-                    }
-                    if pieces.iter().all(|&piece| piece.is_some() && piece.unwrap() == *player ) {
-                        winner = Some(*player)
-                    }
+            for row in 0..(HEIGHT) {
+                for index in 0..(WIDTH-3) {
+                    let columns = &self.columns[index..(index+4)];
+                    let mut pieces = columns.iter().map(|column| column[row] );
+
+                    if pieces.all(|piece| piece == Some(*player) ) { winner = Some(*player); }
                 }
             }
         }
